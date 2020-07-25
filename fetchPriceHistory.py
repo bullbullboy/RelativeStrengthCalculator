@@ -1,4 +1,5 @@
 import yfinance as yf
+import os
 import datetime
 import dateutil
 from dateutil.relativedelta import relativedelta
@@ -15,11 +16,12 @@ def toStrFromDatetime(datetime):
     return f'{datetime:%Y-%m-%d}'
 
 def main():
-    # 定数
-    PATH_RESULT = 'result.txt'
+    # 定数 pyファイルと同じディレクトリを読み書き
+    PATH_RESULT         = os.path.dirname(__file__) + '/result.txt'
+    PATH_TICKER_LIST    = os.path.dirname(__file__) + '/tickerList.txt' 
 
     # Tickerリストの読み込み
-    with open('tickerList.txt') as tickerListFile:
+    with open(PATH_TICKER_LIST) as tickerListFile:
         lines = tickerListFile.read()
     
     # 日時文字列作成

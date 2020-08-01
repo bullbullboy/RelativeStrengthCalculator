@@ -27,8 +27,11 @@ def collectPrice():
     # 日時文字列作成
     dateOfToday = toStrFromDatetime(datetime.date.today())
     dateOfReference = ["","","",""]
-    dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3, days=-1))
-    dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6, days=-1))
+
+    # TODO [bugfix]実行日によってはデータ取得ができない問題あり。現状は手動で日にちをずらす必要がある。
+    # 例) dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3, days=-1))
+    dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3))
+    dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6))
     dateOfReference[2] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-9))
     dateOfReference[3] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-12))
 

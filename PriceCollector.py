@@ -1,7 +1,8 @@
 import yfinance as yf
-import os
 import datetime
 import dateutil
+import Common
+
 from dateutil.relativedelta import relativedelta
 
 def fetchClosePrice(ticker, date):
@@ -17,8 +18,8 @@ def toStrFromDatetime(datetime):
 
 def collectPrice():
     # 定数 pyファイルと同じディレクトリを読み書き
-    PATH_RESULT         = os.path.dirname(__file__) + '/result.txt'
-    PATH_TICKER_LIST    = os.path.dirname(__file__) + '/tickerList.txt' 
+    PATH_RESULT         = Common.pathOfPriceResult()
+    PATH_TICKER_LIST    = Common.pathOfTickerList()
 
     # Tickerリストの読み込み
     with open(PATH_TICKER_LIST) as tickerListFile:

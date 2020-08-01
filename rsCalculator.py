@@ -1,5 +1,5 @@
-import os
 import math
+import Common
 
 class Ticker:
     def __init__(self, idx, symbol, priceNow, price1QAgo, price2QAgo, price3QAgo, price4QAgo):
@@ -32,8 +32,8 @@ class Ticker:
 
 def calcRS():
     #TODO 共通化
-    PATH_RESULT = os.path.dirname(__file__) + '/result.txt'
-    PATH_RESULT_RS = os.path.dirname(__file__) + '/resultRS.txt'
+    PATH_RESULT = Common.pathOfPriceResult()
+    PATH_RESULT_RS =Common.pathOfRSResult()
 
     # RS計算に必要な価格がかかれたファイルの読み込み
     # 各行は以下のフォーマット

@@ -2,6 +2,7 @@ import yfinance as yf
 import datetime
 import dateutil
 import Common
+import os
 
 from dateutil.relativedelta import relativedelta
 
@@ -35,6 +36,11 @@ def collectPrice():
     dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6))
     dateOfReference[2] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-9))
     dateOfReference[3] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-12))
+
+    # Resultフォルダ作成
+    resultPath = Common.pathOfResultDir()
+    if not os.path.exists(resultPath):
+        os.mkdir(Common.pathOfResultDir())
 
     # 'a': 追記
     with open(PATH_RESULT, mode='w') as f:

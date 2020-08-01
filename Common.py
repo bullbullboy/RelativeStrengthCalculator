@@ -1,10 +1,13 @@
 import os
 
+def pathOfResultDir():
+    return os.path.dirname(__file__) + '/result'
+
 def pathOfPriceResult():
-    return os.path.dirname(__file__) + '/resultPrice.txt'
+    return pathOfResultDir() + '/resultPrice.txt'
 
 def pathOfRSResult():
-    return os.path.dirname(__file__) + '/resultRS.txt'
+    return  pathOfResultDir() + '/resultRS.txt'
 
 def pathOfTickerList():
     return os.path.dirname(__file__) + '/tickerList.txt'

@@ -15,7 +15,7 @@ def toStrFromDatetime(datetime):
     # https://qiita.com/xza/items/9618e25a8cb08c44cdb0
     return f'{datetime:%Y-%m-%d}'
 
-def fetchPrice():
+def collectPrice():
     # 定数 pyファイルと同じディレクトリを読み書き
     PATH_RESULT         = os.path.dirname(__file__) + '/result.txt'
     PATH_TICKER_LIST    = os.path.dirname(__file__) + '/tickerList.txt' 

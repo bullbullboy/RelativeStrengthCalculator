@@ -59,3 +59,5 @@ def collectPrice():
             #ファイルへの本出力
             f.write(resultStr+'\n')
             f.flush() #バッファにたまって即時出力されない問題の解消
+    
+    print('価格一覧を出力>>' + PATH_RESULT)

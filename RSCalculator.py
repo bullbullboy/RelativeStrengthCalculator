@@ -66,3 +66,6 @@ def calcRS():
     with open(PATH_RESULT_RS, mode='w') as f:
         for eachTicker in tickerList:
             f.write(eachTicker.symbol + '\t' + str(eachTicker.RS) + '\n')
+    
+    print('RS一覧を出力>>' + PATH_RESULT_RS)
+    

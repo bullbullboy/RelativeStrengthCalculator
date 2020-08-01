@@ -39,9 +39,10 @@ def collectPrice():
     # 'a': 追記
     with open(PATH_RESULT, mode='w') as f:
 
-        # 取得日をメモ
-        f.write(dateOfToday +'\t' + dateOfReference[0]+'\t' + dateOfReference[1]+'\t' + dateOfReference[2]+'\t' + dateOfReference[3] + '\n')
+        # ヘッダー出力
+        f.write("ticker\t" + dateOfToday +'\t' + dateOfReference[0]+'\t' + dateOfReference[1]+'\t' + dateOfReference[2]+'\t' + dateOfReference[3] + '\n')
 
+        # 価格出力
         splittedLines = lines.split('\n')
         for count, line in enumerate(splittedLines):
             resultStr = f'{line}\t{fetchClosePrice(line, dateOfToday)}\t{fetchClosePrice(line, dateOfReference[0])}\t{fetchClosePrice(line, dateOfReference[1])}\t{fetchClosePrice(line, dateOfReference[2])}\t{fetchClosePrice(line, dateOfReference[3])}'

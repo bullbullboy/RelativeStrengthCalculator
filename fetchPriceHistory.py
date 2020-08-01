@@ -15,7 +15,7 @@ def toStrFromDatetime(datetime):
     # https://qiita.com/xza/items/9618e25a8cb08c44cdb0
     return f'{datetime:%Y-%m-%d}'
 
-def main():
+def fetchPrice():
     # 定数 pyファイルと同じディレクトリを読み書き
     PATH_RESULT         = os.path.dirname(__file__) + '/result.txt'
     PATH_TICKER_LIST    = os.path.dirname(__file__) + '/tickerList.txt' 
@@ -27,8 +27,8 @@ def main():
     # 日時文字列作成
     dateOfToday = toStrFromDatetime(datetime.date.today())
     dateOfReference = ["","","",""]
-    dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3))
-    dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6))
+    dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3, days=-1))
+    dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6, days=-1))
     dateOfReference[2] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-9))
     dateOfReference[3] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-12))
 
@@ -48,5 +48,3 @@ def main():
             #ファイルへの本出力
             f.write(resultStr+'\n')
             f.flush() #バッファにたまって即時出力されない問題の解消
-
-main()

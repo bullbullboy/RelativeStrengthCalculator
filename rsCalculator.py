@@ -30,7 +30,7 @@ class Ticker:
         else:
             return cls(idx, elem[0], elem[1], elem[2], elem[3], elem[4], elem[5])
 
-def main():
+def calcRS():
     #TODO 共通化
     PATH_RESULT = os.path.dirname(__file__) + '/result.txt'
     PATH_RESULT_RS = os.path.dirname(__file__) + '/resultRS.txt'
@@ -66,5 +66,3 @@ def main():
     with open(PATH_RESULT_RS, mode='w') as f:
         for eachTicker in tickerList:
             f.write(eachTicker.symbol + '\t' + str(eachTicker.RS) + '\n')
-
-main()

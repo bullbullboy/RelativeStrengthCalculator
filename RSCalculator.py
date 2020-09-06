@@ -3,23 +3,33 @@ import Common
 
 class Ticker:
     def __init__(self, idx, symbol, priceNow, price1QAgo, price2QAgo, price3QAgo, price4QAgo):
-        self.invalid = (priceNow == '-') or (price1QAgo == '-') or (price2QAgo == '-') or (price3QAgo == '-') or (price4QAgo == '-')
+        #self.invalid = (priceNow == '-') or (price1QAgo == '-') or (price2QAgo == '-') or (price3QAgo == '-') or (price4QAgo == '-')
+        self.invalid = False
         self.idx = idx
         self.symbol = symbol
-        self.priceNow = priceNow
-        self.price1QAgo = price1QAgo
-        self.price2QAgo = price2QAgo
-        self.price3QAgo = price3QAgo
-        self.price4QAgo = price4QAgo
+
+        try:
+            self.priceNow = float(priceNow)
+            self.price1QAgo = float(price1QAgo)
+            self.price2QAgo = float(price2QAgo)
+            self.price3QAgo = float(price3QAgo)
+            self.price4QAgo = float(price4QAgo)
+        except:
+            self.invalid = True
+
         self.RS = '-'
+        self.RSRaw = self.RSRawScore()
 
     def RSRawScore(self):
-        priceNow = float(self.priceNow)
-        price1QAgo = float(self.price1QAgo)
-        price2QAgo = float(self.price2QAgo)
-        price3QAgo = float(self.price3QAgo)
-        price4QAgo = float(self.price4QAgo)
-        return 2*priceNow / price1QAgo + priceNow / price2QAgo + priceNow / price3QAgo + priceNow / price4QAgo
+        try:
+            score = 2 * self.priceNow / self.price1QAgo + self.priceNow / self.price2QAgo + self.priceNow / self.price3QAgo + self.priceNow / self.price4QAgo
+            if math.isnan(score):
+                self.invalid = True
+        except:
+            score = '-'
+            self.invalid = True
+    
+        return score
 
     @classmethod
     # 銘柄    現在価格    3か月前価格  6か月前価格  9か月前価格  12か月前価格"フォーマットの文字列を受けてインスタンスを作成
@@ -34,6 +44,7 @@ def calcRS():
     #TODO 共通化
     PATH_RESULT = Common.pathOfPriceResult()
     PATH_RESULT_RS =Common.pathOfRSResult()
+    PATH_DEBUG = Common.pathOfDebug()
 
     # RS計算に必要な価格がかかれたファイルの読み込み
     # 各行は以下のフォーマット
@@ -52,20 +63,32 @@ def calcRS():
             #do nothing
             break
 
+    #print(str(len(tickerList)) + '\n')
     tickerListExcludeInvalidTicker = filter(lambda x: not x.invalid, tickerList)
-    tickerListSortedByRSRawScore = sorted(tickerListExcludeInvalidTicker, key=lambda x: x.RSRawScore())
+
+    # with open(PATH_DEBUG, mode='w') as f:
+    #     for eachTicker in tickerListExcludeInvalidTicker:
+    #         f.write(eachTicker.symbol + '\n')
+    #print(str(len(list(tickerListExcludeInvalidTicker))))
+    
+    tickerListSortedByRSRawScore = sorted(tickerListExcludeInvalidTicker, key=lambda x: x.RSRaw)
+    #print("result" + str(len(tickerListSortedByRSRawScore)) + '\n')
 
     # RS付与
     numOfTickers = len(tickerListSortedByRSRawScore)
     count = 0
-    for eachTicker in tickerListSortedByRSRawScore:
-        eachTicker.RS = math.floor((count / numOfTickers) * 100)
-        count += 1
-        # print(eachTicker.symbol + ':' + str(eachTicker.RS) + str(eachTicker.RSRawScore()))
+
+    with open(PATH_RESULT_RS, mode='w') as f:
+        for eachTicker in tickerListSortedByRSRawScore:
+            eachTicker.RS = min(math.floor((count / numOfTickers) * 99) + 1, 99)
+            count += 1
+            f.write(eachTicker.symbol + '\t' + str(eachTicker.RS) + '\t' + str(eachTicker.RSRaw) + '\n')
+            #print(eachTicker.symbol + ':' + str(eachTicker.RS) + '\t' + str(eachTicker.RSRawScore()))
     
     with open(PATH_RESULT_RS, mode='w') as f:
-        for eachTicker in tickerList:
-            f.write(eachTicker.symbol + '\t' + str(eachTicker.RS) + '\n')
+       for eachTicker in tickerList:
+            rawScore = '-' if eachTicker.invalid else eachTicker.RSRawScore()
+            f.write(eachTicker.symbol + '\t' + str(eachTicker.RS) + '\t' + str(rawScore) +  '\n')
     
     print('RS一覧を出力>>' + PATH_RESULT_RS)
 

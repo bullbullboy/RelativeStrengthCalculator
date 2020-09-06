@@ -11,3 +11,6 @@ def pathOfRSResult():
 
 def pathOfTickerList():
     return os.path.dirname(__file__) + '/tickerList.txt'
+
+def pathOfDebug():
+    return os.path.dirname(__file__) + '/debug.txt'

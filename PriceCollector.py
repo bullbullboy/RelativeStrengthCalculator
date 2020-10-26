@@ -27,12 +27,29 @@ def collectPrice():
     PATH_RESULT         = Common.pathOfPriceResult()
     PATH_TICKER_LIST    = Common.pathOfTickerList()
 
+    # 基準日の確認 & 更新
+    print("RS計算を行います")
+    targetDatetime = datetime.date.today()
+    print("基準の日は" + toStrFromDatetime(targetDatetime) + "でよいですか？ y/n")
+    inputStr = input()
+    if inputStr != "y":
+        print("基準とする日を入力してEnterを入力してください。 入力例)" + toStrFromDatetime(targetDatetime))
+        inputTargetStr=input()
+
+        try:
+            targetDatetime = datetime.datetime.strptime(inputTargetStr, '%Y-%m-%d')
+        except:
+            print("不正な入力のため処理を中断します")
+            return
+
+    print(toStrFromDatetime(targetDatetime) + "を基準日として計算を開始します")
+
     # Tickerリストの読み込み
     with open(PATH_TICKER_LIST) as tickerListFile:
         lines = tickerListFile.read()
     
     # 日時文字列作成
-    dateOfToday = datetime.date.today()+ relativedelta(days=-3)
+    dateOfToday = targetDatetime
     dateOfReference = ["","","",""]
 
     # TODO [bugfix]実行日によってはデータ取得ができない問題あり。現状は手動で日にちをずらす必要がある。

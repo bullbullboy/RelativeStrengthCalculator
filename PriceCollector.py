@@ -10,7 +10,7 @@ def fetchClosePrice(ticker, date):
     try:
         ticker=yf.Ticker(ticker)
         dateStartStr=toStrFromDatetime(date)
-        dateEndStr=toStrFromDatetime(date + relativedelta(days=+1))
+        dateEndStr=toStrFromDatetime(date + relativedelta(days=+7))
         return ticker.history(start=dateStartStr, end=dateEndStr).Close.values[0]
     except:
         return "-"

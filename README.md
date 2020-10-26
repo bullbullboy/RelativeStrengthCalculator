@@ -14,3 +14,10 @@ http://bullinu.com/2020/07/11/how-to-calc-relativestrength/
 
 # 仕組み
 - Yahoo financeのAPIを利用しています
+
+# 変更履歴
+Ver1.00 初公開
+Ver1.01 以下の改善を実施
+・東証のデータに対応(末尾に".TをつけてtickerList.txtに記載すれば取得可能。例. 1301.T)
+・基準日を実行開始時にコマンドライン上で変更可能に
+・データ取得日が休場日の場合に手修正が必要な問題を修正

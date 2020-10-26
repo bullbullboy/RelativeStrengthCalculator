@@ -9,13 +9,18 @@ from dateutil.relativedelta import relativedelta
 def fetchClosePrice(ticker, date):
     try:
         ticker=yf.Ticker(ticker)
-        return ticker.history(start=date, end=date).Close.values[0]
+        dateStartStr=toStrFromDatetime(date)
+        dateEndStr=toStrFromDatetime(date + relativedelta(days=+1))
+        return ticker.history(start=dateStartStr, end=dateEndStr).Close.values[0]
     except:
         return "-"
 
 def toStrFromDatetime(datetime):
     # https://qiita.com/xza/items/9618e25a8cb08c44cdb0
     return f'{datetime:%Y-%m-%d}'
+
+def toTimeStampStr(datetime0, datetime1, datetime2, datetime3, datetime4):
+    return "ticker\t" + toStrFromDatetime(datetime0) +'\t' + toStrFromDatetime(datetime1)+'\t' + toStrFromDatetime(datetime2) + '\t'+ toStrFromDatetime(datetime3)+'\t'+ toStrFromDatetime(datetime4) + '\n'
 
 def collectPrice():
     # 定数 pyファイルと同じディレクトリを読み書き
@@ -27,15 +32,15 @@ def collectPrice():
         lines = tickerListFile.read()
     
     # 日時文字列作成
-    dateOfToday = toStrFromDatetime(datetime.date.today())
+    dateOfToday = datetime.date.today()+ relativedelta(days=-3)
     dateOfReference = ["","","",""]
 
     # TODO [bugfix]実行日によってはデータ取得ができない問題あり。現状は手動で日にちをずらす必要がある。
     # 例) dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3, days=-1))
-    dateOfReference[0] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-3))
-    dateOfReference[1] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-6))
-    dateOfReference[2] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-9))
-    dateOfReference[3] = toStrFromDatetime(datetime.date.today() + relativedelta(months=-12))
+    dateOfReference[0] = dateOfToday + relativedelta(months=-3)
+    dateOfReference[1] = dateOfToday + relativedelta(months=-6)
+    dateOfReference[2] = dateOfToday + relativedelta(months=-9)
+    dateOfReference[3] = dateOfToday + relativedelta(months=-12)
 
     # Resultフォルダ作成
     resultPath = Common.pathOfResultDir()
@@ -46,7 +51,9 @@ def collectPrice():
     with open(PATH_RESULT, mode='w') as f:
 
         # ヘッダー出力
-        f.write("ticker\t" + dateOfToday +'\t' + dateOfReference[0]+'\t' + dateOfReference[1]+'\t' + dateOfReference[2]+'\t' + dateOfReference[3] + '\n')
+        header=toTimeStampStr(dateOfToday, dateOfReference[0],dateOfReference[1],dateOfReference[2],dateOfReference[3])
+        f.write(header)
+        print(header)
 
         # 価格出力
         splittedLines = lines.split('\n')
